@@ -457,7 +457,7 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                     for (String tb: theTasks) {
                                         taskBodies += tb;
                                     }
-                                    logger.warn("failed to execute bulk for delivery tags [{}], nack'ing", taskBodies, e, deliveryTags);
+                                    logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", taskBodies, e, deliveryTags);
                                     for (Long deliveryTag : deliveryTags) {
                                         try {
                                             channel.basicNack(deliveryTag, false, false);
@@ -490,7 +490,12 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                     @Override
                                     public void onFailure(Throwable e) {
                                         if (rabbitNackErrors) {
-                                            logger.warn("failed to execute bulk for delivery tags [{}], nack'ing", e, deliveryTags);
+                                            String taskBodies = "";
+                                            for (String tb: theTasks) {
+                                                taskBodies += tb;
+                                            }
+
+                                            logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", taskBodies, e, deliveryTags);
                                             for (Long deliveryTag : deliveryTags) {
                                                 try {
                                                     channel.basicNack(deliveryTag, false, false);
