@@ -294,6 +294,7 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
         @Override
         public void run() {
             while (true) {
+                logger.info("running version 2.4.4 you've installed correctly!");
                 if (closed) {
                     break;
                 }
