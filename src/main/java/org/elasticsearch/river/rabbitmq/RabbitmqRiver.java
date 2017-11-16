@@ -434,6 +434,8 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                             logger.trace("executing bulk with [{}] actions", bulkRequestBuilder.numberOfActions());
                         }
 
+                        logger.info("hello this is ashwin");
+
                         if (ordered) {
                             try {
                                 if (bulkRequestBuilder.numberOfActions() > 0) {
