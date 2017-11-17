@@ -294,7 +294,7 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
         @Override
         public void run() {
             while (true) {
-                logger.info("running version 2.4.4 you've installed correctly!");
+                logger.info("running version 2.4.3 you've installed correctly!");
                 if (closed) {
                     break;
                 }
@@ -435,8 +435,6 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                             logger.trace("executing bulk with [{}] actions", bulkRequestBuilder.numberOfActions());
                         }
 
-                        logger.info("hello this is ashwin");
-
                         if (ordered) {
                             try {
                                 if (bulkRequestBuilder.numberOfActions() > 0) {
@@ -460,7 +458,8 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                     for (String tb: theTasks) {
                                         taskBodies += tb;
                                     }
-                                    logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", taskBodies, e, deliveryTags);
+                                    logger.info("*** these are the task bodies: " + taskBodies);
+                                    logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", e, deliveryTags, taskBodies);
                                     for (Long deliveryTag : deliveryTags) {
                                         try {
                                             channel.basicNack(deliveryTag, false, false);
@@ -498,7 +497,9 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                                 taskBodies += tb;
                                             }
 
-                                            logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", taskBodies, e, deliveryTags);
+                                            logger.info("*** these are the task bodies: " + taskBodies);
+
+                                            logger.warn("jie: failed to execute bulk for delivery tags [{}], nack'ing", e, deliveryTags, taskBodies);
                                             for (Long deliveryTag : deliveryTags) {
                                                 try {
                                                     channel.basicNack(deliveryTag, false, false);
