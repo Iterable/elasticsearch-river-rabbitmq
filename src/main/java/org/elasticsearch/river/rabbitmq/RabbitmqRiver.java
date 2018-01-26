@@ -404,7 +404,8 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                   if (response.hasFailures()) {
                                     // TODO write to exception queue?
                                       String failMsg = response.buildFailureMessage()
-                                      isRecoverableFailure = failMsg.contains("EsRejectedExecutionException");
+                                      // Rejected executions due to queue capacity limit should be retried
+                                      isRecoverableFailure = failMsg.contains("queue capacity");
                                       logger.warn("failed to execute" + failMsg);
                                   }
                                 }
