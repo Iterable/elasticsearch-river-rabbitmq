@@ -449,6 +449,7 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
                                         }
                                         for (Long deliveryTag : deliveryTags) {
                                             try {
+                                                channel.basicAck(deliveryTag, false);
                                             } catch (Exception e1) {
                                                 logger.warn("failed to ack [{}]", e1, deliveryTag);
                                             }
