@@ -398,16 +398,24 @@ public class RabbitmqRiver extends AbstractRiverComponent implements River {
 
                         if (ordered) {
                             try {
+                                Boolean isRecoverableFailure = false;
                                 if (bulkRequestBuilder.numberOfActions() > 0) {
                                   BulkResponse response = bulkRequestBuilder.execute().actionGet();
                                   if (response.hasFailures()) {
                                     // TODO write to exception queue?
-                                    logger.warn("failed to execute" + response.buildFailureMessage());
+                                      String failMsg = response.buildFailureMessage()
+                                      // Rejected executions due to queue capacity limit should be retried
+                                      isRecoverableFailure = failMsg.contains("queue capacity");
+                                      logger.warn("failed to execute" + failMsg);
                                   }
                                 }
                                 for (Long deliveryTag : deliveryTags) {
                                     try {
-                                        channel.basicAck(deliveryTag, false);
+                                        if (isRecoverableFailure) {
+                                            channel.basicNack(deliveryTag, false, false);
+                                        } else {
+                                            channel.basicAck(deliveryTag, false);
+                                        }
                                     } catch (Exception e1) {
                                         logger.warn("failed to ack [{}]", e1, deliveryTag);
                                     }
